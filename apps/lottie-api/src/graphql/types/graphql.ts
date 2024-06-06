@@ -25,6 +25,23 @@ export type Animation = {
   url: Scalars['String']['output'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  downloadAnimation?: Maybe<Scalars['String']['output']>;
+  uploadAnimation?: Maybe<Animation>;
+};
+
+
+export type MutationDownloadAnimationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationUploadAnimationArgs = {
+  file: Scalars['Upload']['input'];
+  metadata: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   animations?: Maybe<Array<Maybe<Animation>>>;
@@ -117,6 +134,7 @@ export type ResolversTypes = {
   Animation: ResolverTypeWrapper<Animation>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
@@ -127,6 +145,7 @@ export type ResolversParentTypes = {
   Animation: Animation;
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
+  Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   Upload: Scalars['Upload']['output'];
@@ -138,6 +157,11 @@ export type AnimationResolvers<ContextType = any, ParentType extends ResolversPa
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  downloadAnimation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDownloadAnimationArgs, 'id'>>;
+  uploadAnimation?: Resolver<Maybe<ResolversTypes['Animation']>, ParentType, ContextType, RequireFields<MutationUploadAnimationArgs, 'file' | 'metadata'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -153,6 +177,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 
 export type Resolvers<ContextType = any> = {
   Animation?: AnimationResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };

@@ -7,6 +7,11 @@ type Query {
   getAnimation(id: ID!): Animation
 }
 
+type Mutation {
+  uploadAnimation(file: Upload!, metadata: String!): Animation
+  downloadAnimation(id: ID!): String
+}
+
 type Animation {
   id: ID!
   title: String!

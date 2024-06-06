@@ -24,6 +24,7 @@
     "@graphql-tools/merge": "^9.0.4",
     "@graphql-tools/schema": "^10.0.4",
     "@types/graphql-upload": "^16.0.7",
+    "@types/uuid": "^9.0.8",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
