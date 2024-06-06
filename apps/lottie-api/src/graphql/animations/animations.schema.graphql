@@ -1,11 +1,15 @@
+scalar Upload
+
 type Query {
   queryName: String
   animations: [Animation]
+  searchAnimations(query: String!): [Animation]
+  getAnimation(id: ID!): Animation
 }
 
 type Animation {
-  id: ID
-  title: String
-  metadata: String
-  url: String
+  id: ID!
+  title: String!
+  metadata: String!
+  url: String!
 }

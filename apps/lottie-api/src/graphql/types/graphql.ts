@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -6,6 +6,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -13,20 +14,33 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Upload: { input: any; output: any; }
 };
 
 export type Animation = {
   __typename?: 'Animation';
-  id?: Maybe<Scalars['ID']['output']>;
-  metadata?: Maybe<Scalars['String']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
-  url?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  metadata: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
   animations?: Maybe<Array<Maybe<Animation>>>;
+  getAnimation?: Maybe<Animation>;
   queryName?: Maybe<Scalars['String']['output']>;
+  searchAnimations?: Maybe<Array<Maybe<Animation>>>;
+};
+
+
+export type QueryGetAnimationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QuerySearchAnimationsArgs = {
+  query: Scalars['String']['input'];
 };
 
 
@@ -105,6 +119,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -114,23 +129,31 @@ export type ResolversParentTypes = {
   ID: Scalars['ID']['output'];
   Query: {};
   String: Scalars['String']['output'];
+  Upload: Scalars['Upload']['output'];
 };
 
 export type AnimationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Animation'] = ResolversParentTypes['Animation']> = {
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  metadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   animations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Animation']>>>, ParentType, ContextType>;
+  getAnimation?: Resolver<Maybe<ResolversTypes['Animation']>, ParentType, ContextType, RequireFields<QueryGetAnimationArgs, 'id'>>;
   queryName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  searchAnimations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Animation']>>>, ParentType, ContextType, RequireFields<QuerySearchAnimationsArgs, 'query'>>;
 };
+
+export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
+  name: 'Upload';
+}
 
 export type Resolvers<ContextType = any> = {
   Animation?: AnimationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Upload?: GraphQLScalarType;
 };
 
