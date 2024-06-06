@@ -1,0 +1,11 @@
+type Query {
+  queryName: String
+  animations: [Animation]
+}
+
+type Animation {
+  id: ID
+  title: String
+  metadata: String
+  url: String
+}
