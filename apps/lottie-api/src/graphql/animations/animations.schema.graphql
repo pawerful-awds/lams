@@ -5,6 +5,7 @@ type Query {
   animations: [Animation]
   searchAnimations(query: String!): [Animation]
   getAnimation(id: ID!): Animation
+  getAnimations: [Animation]
 }
 
 type Mutation {

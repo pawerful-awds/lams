@@ -46,6 +46,7 @@ export type Query = {
   __typename?: 'Query';
   animations?: Maybe<Array<Maybe<Animation>>>;
   getAnimation?: Maybe<Animation>;
+  getAnimations?: Maybe<Array<Maybe<Animation>>>;
   queryName?: Maybe<Scalars['String']['output']>;
   searchAnimations?: Maybe<Array<Maybe<Animation>>>;
 };
@@ -167,6 +168,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   animations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Animation']>>>, ParentType, ContextType>;
   getAnimation?: Resolver<Maybe<ResolversTypes['Animation']>, ParentType, ContextType, RequireFields<QueryGetAnimationArgs, 'id'>>;
+  getAnimations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Animation']>>>, ParentType, ContextType>;
   queryName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   searchAnimations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Animation']>>>, ParentType, ContextType, RequireFields<QuerySearchAnimationsArgs, 'query'>>;
 };
