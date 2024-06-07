@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
+import { graphqlUploadExpress } from 'graphql-upload-minimal';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { makeExecutableSchema } from '@graphql-tools/schema';
@@ -19,20 +20,6 @@ const schema = makeExecutableSchema({
   resolvers: mergedResolvers,
 });
 
-// The GraphQL schema
-const typeDefs = `#graphql
-  type Query {
-    hello: String
-  }
-`;
-
-// A map of functions which return data for the schema.
-const resolvers = {
-  Query: {
-    hello: () => 'world',
-  },
-};
-
 async function startApollo() {
   const server = new ApolloServer({
     schema,
@@ -47,7 +34,7 @@ export const gqlServer = (): Router => {
   const router = express.Router();
 
   startApollo().then((server) => {
-    router.use('/graphql', expressMiddleware(server));
+    router.use('/graphql', graphqlUploadExpress(), expressMiddleware(server));
   });
   return router;
 };

@@ -1,4 +1,4 @@
-import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs';
+import { GraphQLUpload } from 'graphql-upload-minimal';
 import { v4 as uuidv4 } from 'uuid';
 
 import { db, bucket } from '@/services/firebase';
@@ -51,6 +51,17 @@ const animations = () => {
   } catch (error: any) {
     throw new Error(`fetching animations: ${error.message}`);
   }
+};
+
+/**
+ * Get Animations
+ * @param _parent
+ * @returns Animation[]
+ */
+const getAnimations = async (_parent: unknown) => {
+  // TODO: try catch
+  const snapshot = await db.collection('animations').get();
+  return snapshot.docs.map(toAnimation);
 };
 
 /**
@@ -129,6 +140,7 @@ const resolvers: Resolvers = {
     queryName,
     animations,
     getAnimation,
+    getAnimations,
     searchAnimations,
   },
   Mutation: {
