@@ -1,7 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import animationsReducer from "./features/animations";
+
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    animations: animationsReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
