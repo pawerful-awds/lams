@@ -18,4 +18,5 @@ type Animation {
   title: String!
   metadata: String!
   url: String!
+  animationData: String
 }

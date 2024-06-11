@@ -19,6 +19,7 @@ export type Scalars = {
 
 export type Animation = {
   __typename?: 'Animation';
+  animationData?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   metadata: Scalars['String']['output'];
   title: Scalars['String']['output'];
@@ -153,6 +154,7 @@ export type ResolversParentTypes = {
 };
 
 export type AnimationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Animation'] = ResolversParentTypes['Animation']> = {
+  animationData?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   metadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { db, bucket } from '@/services/firebase';
 
 import type { Animation, Resolvers } from '../types/graphql';
+import { fetchAnimationData } from './utils';
 
 export interface QueryArgs {
   query: string;
@@ -22,13 +23,15 @@ export interface DownloadAnimationArgs {
   id: string;
 }
 
-const toAnimation = (doc: FirebaseFirestore.DocumentSnapshot): Animation => {
+const toAnimation = async (doc: FirebaseFirestore.DocumentSnapshot): Promise<Animation> => {
   const data = doc.data();
+  const animationData = await fetchAnimationData(data?.url);
   return {
     id: doc.id,
     title: data?.title,
     metadata: data?.metadata,
     url: data?.url,
+    animationData,
   } as Animation;
 };
 
@@ -72,8 +75,21 @@ const getAnimations = async (_parent: unknown) => {
  */
 const getAnimation = async (_parent: unknown, { id }: AnimationArgs) => {
   // TODO: try catch
+  console.log('# get animation', id);
   const doc = await db.collection('animations').doc(id).get();
-  return doc.exists ? toAnimation(doc) : null;
+  if (!doc.exists) {
+    throw new Error('Error fetching animation details and data');
+  }
+  const data = doc.data();
+  const animationData = await fetchAnimationData(data?.url);
+  console.log('# animation data', animationData);
+  return {
+    id: doc.id,
+    title: data?.title,
+    metadata: data?.metadata,
+    url: data?.url,
+    animationData,
+  } as Animation;
 };
 
 /**
