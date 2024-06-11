@@ -82,7 +82,6 @@ const getAnimation = async (_parent: unknown, { id }: AnimationArgs) => {
   }
   const data = doc.data();
   const animationData = await fetchAnimationData(data?.url);
-  console.log('# animation data', animationData);
   return {
     id: doc.id,
     title: data?.title,
