@@ -1,31 +1,28 @@
 import { createApi, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import { DocumentNode } from "graphql";
-import {
-  ApolloClient,
-  ApolloQueryResult,
-  InMemoryCache,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
-export type TGetAnimationsQueryResponse = {
-  getAnimations: {
-    title: string;
-    id: string;
-    url: string;
-    animationData?: string;
-  }[];
-};
-
-export type TTransformedGetAnimationsResponse = {
+export type TAnimationResponse = {
   title: string;
   id: string;
   url: string;
   animationData: Record<string, TODO> | null;
-}[];
-
-export type TQueryResult<T = TODO> = {
-  data: ApolloQueryResult<T>["data"];
 };
+
+export type TAnimationsQueryBaseResponse = Omit<
+  TAnimationResponse,
+  "animationData"
+> & {
+  animationData?: string;
+};
+
+export type TAnimationsQueryResponse = {
+  getAnimations: TAnimationsQueryBaseResponse[];
+  getAnimation: TAnimationsQueryBaseResponse;
+};
+
+export type TTransformedGetAnimationsResponse = TAnimationResponse[];
+export type TTransformedGetAnimationResponse = TAnimationResponse;
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -33,17 +30,18 @@ const client = new ApolloClient({
 });
 
 const gqlBaseQuery: BaseQueryFn<
-  { document: DocumentNode; variables?: TODO },
+  { document: DocumentNode; variables?: TODO; queryName: string },
   unknown,
   { error: TODO }
-> = async ({ document, variables }) => {
+> = async ({ document, variables, queryName }) => {
   try {
     const result = await client.query({
       query: document,
       variables,
     });
 
-    return { data: result.data };
+    const res = result.data[queryName];
+    return { data: res };
   } catch (error) {
     return { error: error as TODO };
   }
@@ -53,8 +51,10 @@ export const gqlApi = createApi({
   reducerPath: "gqlApi",
   baseQuery: gqlBaseQuery,
   endpoints: (builder) => ({
+    // Get Animations
     getAnimations: builder.query<TTransformedGetAnimationsResponse, void>({
       query: () => ({
+        queryName: "getAnimations",
         document: gql`
           query {
             getAnimations {
@@ -67,9 +67,9 @@ export const gqlApi = createApi({
         `,
       }),
       transformResponse: (
-        response: TGetAnimationsQueryResponse
+        response: TAnimationsQueryResponse["getAnimations"]
       ): TTransformedGetAnimationsResponse => {
-        return response.getAnimations.map((item) => {
+        return response.map((item) => {
           const animationData = item.animationData
             ? { ...JSON.parse(item.animationData) }
             : null;
@@ -81,20 +81,60 @@ export const gqlApi = createApi({
         });
       },
     }),
-    searchAnimations: builder.query<TODO, { id: string }>({
+
+    // Get Single Animation
+    getAnimation: builder.query<
+      TTransformedGetAnimationResponse,
+      { id: string }
+    >({
       query: (args) => ({
+        queryName: "getAnimation",
         document: gql`
-          query SearchAnimations($id: String!) {
-            getAnimations(id: $id) {
+          query GetAnimation($id: ID!) {
+            getAnimation(id: $id) {
               id
-              name
+              title
+              url
+              animationData
             }
           }
         `,
-        variables: { id: args.id },
+        variables: {
+          id: args.id,
+        },
+      }),
+      transformResponse: (
+        response: TAnimationsQueryResponse["getAnimation"]
+      ): TTransformedGetAnimationResponse => {
+        const animationData = response.animationData
+          ? { ...JSON.parse(response.animationData) }
+          : null;
+
+        return {
+          ...response,
+          animationData,
+        };
+      },
+    }),
+
+    // Get Search Animations by keywords
+    searchAnimations: builder.query<TODO, { keyword: string }>({
+      query: (args) => ({
+        queryName: "searchAnimations",
+        document: gql`
+          query SearchAnimations($keyword: String!) {
+            searchAnimations(keyword: $keyword) {
+              id
+              title
+              url
+              animationData
+            }
+          }
+        `,
+        variables: { keyword: args.keyword },
       }),
     }),
   }),
 });
 
-export const { useGetAnimationsQuery } = gqlApi;
+export const { useGetAnimationsQuery, useGetAnimationQuery } = gqlApi;
