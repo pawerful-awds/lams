@@ -76,24 +76,23 @@ export const FileUpload: React.FC<IFileUploadProps> = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex flex-col justify-center items-center rounded-md bg-subject-primary p-2 px-4 cursor-pointer">
       <label
-        htmlFor="fileInput"
-        className="block mb-2 font-medium text-gray-700"
+        htmlFor="fileUpload"
+        className="block font-medium text-white cursor-pointer"
       >
-        {`${children}:`}
+        Upload Animation
       </label>
       <input
-        id="fileInput"
+        id="fileUpload"
         type="file"
-        multiple
         className="hidden"
         onChange={handleFileChange}
       />
-      <div className="flex flex-col space-y-2">
+      {/* <div className="flex flex-col text-[0.8rem] text-white">
         {file && <div key={file.name}>{file.name}</div>}
-        {!file && <p className="text-gray-500">No files selected</p>}
-      </div>
+        {!file && <p className="text-white">No files selected</p>}
+      </div> */}
     </div>
   );
 };

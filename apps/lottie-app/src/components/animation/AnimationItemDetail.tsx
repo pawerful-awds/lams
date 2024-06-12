@@ -17,17 +17,21 @@ export const AnimationItemDetail: React.FC<IAnimationItemDetailProps> = ({
   animationShouldAutoPlay = false,
 }) => {
   return (
-    <article>
+    <article className="relative w-full transition duration-100 ease-out bg-white border border-gray-100 rounded-md animation-card overflow-hidden group p-4">
       <AnimationViewer
         animationData={animationData}
         shouldAutoplay={animationShouldAutoPlay}
+        width={200}
+        height={200}
       />
-      {id ? <h4>{id}</h4> : null}
-      {title ? (
-        <Link to={`/animation/${id}`}>
-          <h3>{title}</h3>
-        </Link>
-      ) : null}
+      <div>
+        {id ? <h4>{id}</h4> : null}
+        {title ? (
+          <Link to={`/animation/${id}`}>
+            <h3 className="text-subject-base">{title}</h3>
+          </Link>
+        ) : null}
+      </div>
     </article>
   );
 };

@@ -1,11 +1,12 @@
 import React from "react";
 import Lottie from "react-lottie";
 
-import sampleAnimationData from "../../sample-animation.json";
-
 export interface IAnimationViewerProps {
+  width?: number;
+  height?: number;
   animationData: Record<string, TODO> | null;
   shouldAutoplay?: boolean;
+  noPause?: boolean;
 }
 
 const deepClone = (obj: TODO): Record<string, TODO> => {
@@ -23,8 +24,11 @@ const deepClone = (obj: TODO): Record<string, TODO> => {
 };
 
 export const AnimationViewer: React.FC<IAnimationViewerProps> = ({
+  width = 300,
+  height = 300,
   animationData,
   shouldAutoplay = false,
+  noPause = false,
 }) => {
   const defaultOptions = {
     loop: true,
@@ -36,7 +40,12 @@ export const AnimationViewer: React.FC<IAnimationViewerProps> = ({
   };
   return (
     <div>
-      <Lottie options={defaultOptions} height={400} width={400} />
+      <Lottie
+        options={defaultOptions}
+        height={height}
+        width={width}
+        isClickToPauseDisabled={noPause}
+      />
     </div>
   );
 };

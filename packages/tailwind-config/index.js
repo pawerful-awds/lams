@@ -10,7 +10,20 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        surface: {
+          background: "#f3f6f8",
+        },
+        subject: {
+          primary: "#019d91",
+          base: "#20272c",
+        },
+        stroke: {
+          neutral: "#d9e0e6",
+        },
+      },
+    },
   },
   variants: {
     extend: {},

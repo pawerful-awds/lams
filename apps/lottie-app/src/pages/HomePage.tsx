@@ -1,7 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { AnimationItemDetail } from "../components";
+import { Loader, AnimationList } from "../components";
 import { useGetAnimationsQuery } from "../rdx/services/gql";
 
 const HomePage: React.FC = () => {
@@ -11,26 +11,15 @@ const HomePage: React.FC = () => {
   const { data, error, isLoading } = useGetAnimationsQuery();
 
   return (
-    <div>
-      <h2>Welcome to LAMS</h2>
-      <p>Query: {q}</p>
-      {isLoading && <p>Loading..</p>}
-      {data && (
-        <ul>
-          {data.map(({ id, title, animationData }) => {
-            return (
-              <li key={id}>
-                <AnimationItemDetail
-                  id={id}
-                  title={title}
-                  animationData={animationData}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      {error && <p>{JSON.stringify(error)}</p>}
+    <div className="flex flex-col p-4">
+      <h2 className="text-subject-base font-semibold text-2xl text-left">
+        Welcome to LAMS
+      </h2>
+
+      <div className="flex justify-center w-full py-4">
+        {isLoading && <Loader />}
+        <AnimationList data={data} />
+      </div>
     </div>
   );
 };
