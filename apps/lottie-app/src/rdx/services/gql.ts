@@ -13,6 +13,7 @@ export type TAnimationResponse = {
   id: string;
   url: string;
   animationData: Record<string, TODO> | null;
+  createdAt: TODO;
 };
 
 export type TAnimationsQueryBaseResponse = Omit<
@@ -56,8 +57,13 @@ const gqlUploadQuery: BaseQueryFn<
       method: "POST",
       body: formData,
     });
-    const data = await response.json();
-    return { data };
+    const respData = await response.json();
+    if (respData.errors) {
+      if (!navigator.onLine) {
+        throw new Error("OFFLINE");
+      }
+    }
+    return { data: respData.data };
   } catch (error) {
     return { error: error as TODO };
   }
@@ -98,6 +104,7 @@ const gqlBaseQuery: BaseQueryFn<
 export const gqlApi = createApi({
   reducerPath: "gqlApi",
   baseQuery: gqlBaseQuery,
+  tagTypes: ["tag:animations"],
   endpoints: (builder) => ({
     // Get Animations
     getAnimations: builder.query<TTransformedGetAnimationsResponse, void>({
@@ -110,6 +117,7 @@ export const gqlApi = createApi({
               title
               url
               animationData
+              createdAt
             }
           }
         `,
@@ -128,6 +136,7 @@ export const gqlApi = createApi({
           };
         });
       },
+      providesTags: ["tag:animations"],
     }),
 
     // Get Single Animation
@@ -191,17 +200,22 @@ export const gqlApi = createApi({
 export const gqlUploadApi = createApi({
   reducerPath: "gqlUploadApi",
   baseQuery: gqlUploadQuery,
+  tagTypes: ["tag:animations"],
   endpoints: (builder) => ({
     // Upload animation
     uploadAnimation: builder.mutation<
       TTransformedGetAnimationResponse,
-      { file: File; metadata: string }
+      { file: File; metadata: TODO; title: string }
     >({
-      query: ({ file, metadata }) => ({
+      query: ({ file, metadata, title }) => ({
         queryName: "uploadAnimation",
         document: gql`
-          mutation UploadAnimation($file: Upload!, $metadata: String!) {
-            uploadAnimation(file: $file, metadata: $metadata) {
+          mutation UploadAnimation(
+            $file: Upload!
+            $metadata: String!
+            $title: String!
+          ) {
+            uploadAnimation(file: $file, metadata: $metadata, title: $title) {
               id
               title
               metadata
@@ -209,17 +223,20 @@ export const gqlUploadApi = createApi({
             }
           }
         `,
-        variables: { file, metadata },
+        variables: { file, metadata, title },
       }),
       onQueryStarted: async (data, { queryFulfilled }) => {
+        console.log("# uploadAnimation started");
         try {
           await queryFulfilled;
         } catch {
           if (!navigator.onLine) {
+            console.log("# upload offline", data);
             saveUploadToQueue(data);
           }
         }
       },
+      invalidatesTags: ["tag:animations"],
     }),
   }),
 });
