@@ -1,10 +1,11 @@
 import { GraphQLUpload } from 'graphql-upload-minimal';
 import { v4 as uuidv4 } from 'uuid';
 
-import { db, bucket } from '@/services/firebase';
+import { db, bucket, admin } from '@/services/firebase';
 
 import type { Animation, Resolvers } from '../types/graphql';
 import { fetchAnimationData } from './utils';
+import { Kind } from 'graphql';
 
 export interface QueryArgs {
   query: string;
@@ -17,6 +18,7 @@ export interface AnimationArgs {
 export interface UploadAnimationArgs {
   file: any;
   metadata: string;
+  title: string;
 }
 
 export interface DownloadAnimationArgs {
@@ -32,6 +34,7 @@ const toAnimation = async (doc: FirebaseFirestore.DocumentSnapshot): Promise<Ani
     metadata: data?.metadata,
     url: data?.url,
     animationData,
+    createdAt: data?.createdAt,
   } as Animation;
 };
 
@@ -110,13 +113,16 @@ const searchAnimations = async (_parent: unknown, { query }: QueryArgs) => {
  * @param { file, metadata }
  * @returns Animation
  */
-const uploadAnimation = async (_parent: unknown, { file, metadata }: UploadAnimationArgs): Promise<Animation> => {
+const uploadAnimation = async (
+  _parent: unknown,
+  { file, metadata, title }: UploadAnimationArgs
+): Promise<Animation> => {
   // TODO: try catch
-  const { createReadStream, filename } = await file;
+  const { createReadStream } = await file;
   const fileId = uuidv4();
   const fileStream = createReadStream();
 
-  const blob = bucket.file(`animations/${fileId}-${filename}`);
+  const blob = bucket.file(`animations/${fileId}-${title}`);
   const blobStream = blob.createWriteStream({
     resumable: false,
     contentType: 'application/json',
@@ -129,8 +135,9 @@ const uploadAnimation = async (_parent: unknown, { file, metadata }: UploadAnima
     blobStream.on('error', reject);
   });
 
-  const url = `https://storage.googleapis.com/${bucket.name}/animations/${fileId}-${filename}`;
-  const newAnimation: Animation = { id: fileId, title: filename, metadata, url };
+  const url = `https://storage.googleapis.com/${bucket.name}/animations/${fileId}-${title}`;
+
+  const newAnimation: Animation = { id: fileId, title, metadata, url, createdAt: admin.firestore.Timestamp.now() };
   await db.collection('animations').doc(fileId).set(newAnimation);
   return newAnimation;
 };
@@ -151,6 +158,7 @@ const downloadAnimation = async (_parent: unknown, { id }: DownloadAnimationArgs
 
 const resolvers: Resolvers = {
   Upload: GraphQLUpload,
+
   Query: {
     queryName,
     animations,

@@ -14,12 +14,14 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Timestamp: { input: any; output: any; }
   Upload: { input: any; output: any; }
 };
 
 export type Animation = {
   __typename?: 'Animation';
   animationData?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['Timestamp']['output']>;
   id: Scalars['ID']['output'];
   metadata: Scalars['String']['output'];
   title: Scalars['String']['output'];
@@ -41,6 +43,7 @@ export type MutationDownloadAnimationArgs = {
 export type MutationUploadAnimationArgs = {
   file: Scalars['Upload']['input'];
   metadata: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -139,6 +142,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
   Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
 };
 
@@ -150,11 +154,13 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
+  Timestamp: Scalars['Timestamp']['output'];
   Upload: Scalars['Upload']['output'];
 };
 
 export type AnimationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Animation'] = ResolversParentTypes['Animation']> = {
   animationData?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Timestamp']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   metadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -164,7 +170,7 @@ export type AnimationResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   downloadAnimation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDownloadAnimationArgs, 'id'>>;
-  uploadAnimation?: Resolver<Maybe<ResolversTypes['Animation']>, ParentType, ContextType, RequireFields<MutationUploadAnimationArgs, 'file' | 'metadata'>>;
+  uploadAnimation?: Resolver<Maybe<ResolversTypes['Animation']>, ParentType, ContextType, RequireFields<MutationUploadAnimationArgs, 'file' | 'metadata' | 'title'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -175,6 +181,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   searchAnimations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Animation']>>>, ParentType, ContextType, RequireFields<QuerySearchAnimationsArgs, 'query'>>;
 };
 
+export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {
+  name: 'Timestamp';
+}
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
 }
@@ -183,6 +193,7 @@ export type Resolvers<ContextType = any> = {
   Animation?: AnimationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Timestamp?: GraphQLScalarType;
   Upload?: GraphQLScalarType;
 };
 

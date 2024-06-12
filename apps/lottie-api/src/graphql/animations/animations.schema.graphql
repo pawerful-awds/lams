@@ -1,4 +1,5 @@
 scalar Upload
+scalar Timestamp
 
 type Query {
   queryName: String
@@ -9,7 +10,7 @@ type Query {
 }
 
 type Mutation {
-  uploadAnimation(file: Upload!, metadata: String!): Animation
+  uploadAnimation(file: Upload!, metadata: String!, title: String!): Animation
   downloadAnimation(id: ID!): String
 }
 
@@ -19,4 +20,5 @@ type Animation {
   metadata: String!
   url: String!
   animationData: String
+  createdAt: Timestamp
 }
