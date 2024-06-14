@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useUploadAnimationMutation } from "../rdx/services/gql";
-import { clearUploadQueue, getUploadQueue } from "../rdx/cache";
 import { validateLottieJSONFile } from "../utils";
 
 export type TUploadObject = {
@@ -48,28 +47,6 @@ export const FileUpload: React.FC = () => {
       setFile(file);
     }
   };
-
-  const uploadAnimationFromQueue = async () => {
-    const uploadQueue = getUploadQueue();
-    try {
-      for (const uploadAnimation of uploadQueue) {
-        // Upload item to server
-        await validateAndUpload(uploadAnimation);
-      }
-      // Clear the queue after all items are uploaded
-      clearUploadQueue();
-      console.log("Upload queue cleared");
-    } catch (error) {
-      console.error("Error uploading files from queue:", error);
-    }
-  };
-
-  React.useEffect(() => {
-    window.addEventListener("online", () => {
-      // When online, upload animations from the queue and clear the queue
-      uploadAnimationFromQueue();
-    });
-  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center rounded-md bg-subject-primary p-2 px-4 cursor-pointer">
