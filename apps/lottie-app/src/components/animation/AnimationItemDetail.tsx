@@ -25,12 +25,8 @@ export const AnimationItemDetail: React.FC<IAnimationItemDetailProps> = ({
         height={200}
       />
       <div>
-        {id ? <h4>{id}</h4> : null}
-        {title ? (
-          <Link to={`/animation/${id}`}>
-            <h3 className="text-subject-base">{title}</h3>
-          </Link>
-        ) : null}
+        {id ? <h4 className="text-[0.6em]">{id}</h4> : null}
+        {title ? <Link to={`/animation/${id}`}>{title}</Link> : null}
       </div>
     </article>
   );

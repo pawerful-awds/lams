@@ -4,17 +4,13 @@ import { useUploadAnimationMutation } from "../rdx/services/gql";
 import { clearUploadQueue, getUploadQueue } from "../rdx/cache";
 import { validateLottieJSONFile } from "../utils";
 
-export interface IFileUploadProps {
-  children: string;
-}
-
 export type TUploadObject = {
   file: File;
   title: string;
   metadata: TODO;
 };
 
-export const FileUpload: React.FC<IFileUploadProps> = ({ children }) => {
+export const FileUpload: React.FC = () => {
   const [uploadAnimation] = useUploadAnimationMutation();
   const [file, setFile] = React.useState<File | null>(null);
 

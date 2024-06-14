@@ -12,11 +12,11 @@ export const RootLayout: React.FC = () => {
     <>
       <Header>
         <small className="text-black">
-          Connectivity: {isOnline ? "is online 🟢" : "is offline 🔴"}
+          Connectivity: {isOnline ? "online 🟢" : "offline 🔴"}
         </small>
-        <FileUpload>Upload animation</FileUpload>
+        <FileUpload />
       </Header>
-      <main className="flex flex-col w-full ">
+      <main className="flex flex-col w-full flex-1">
         <Outlet />
       </main>
       <Footer />
