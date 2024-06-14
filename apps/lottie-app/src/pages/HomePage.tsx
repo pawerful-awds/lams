@@ -7,8 +7,8 @@ import {
   Link,
 } from "react-router-dom";
 
-import { useGetAnimationsQuery } from "../rdx/services/gql";
-import { Loader, AnimationList, useGetOfflineQueueData } from "../components";
+import { useGetAnimationsQuery } from "@/rdx/services/gql";
+import { Loader, AnimationList, useGetOfflineQueueData } from "@/components";
 
 export const Detail = () => {
   const { id } = useParams();

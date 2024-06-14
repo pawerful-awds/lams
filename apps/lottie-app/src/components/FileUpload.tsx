@@ -1,7 +1,7 @@
 import React from "react";
 
-import { useUploadAnimationMutation } from "../rdx/services/gql";
-import { validateLottieJSONFile } from "../utils";
+import { useUploadAnimationMutation } from "@/rdx/services/gql";
+import { validateLottieJSONFile } from "@/utils";
 
 export type TUploadObject = {
   file: File;

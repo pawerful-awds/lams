@@ -2,15 +2,14 @@ import { createApi, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import { DocumentNode, print } from "graphql";
 import { gql } from "@apollo/client";
 
+import { clearQueue as clearOfflineAnimationQueue } from "../features/animations";
+import { syncQueueToState } from "../features/animations/actions";
 import {
   getAnimationsFromCache,
   saveAnimationsToCache,
   saveUploadToQueue,
 } from "../cache";
-
 import { animationsTag } from "./tags";
-import { clearQueue as clearOfflineAnimationQueue } from "../features/animations";
-import { syncQueueToState } from "../features/animations/actions";
 
 export type TAnimationResponse = {
   title: string;

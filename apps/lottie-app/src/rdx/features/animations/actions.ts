@@ -1,8 +1,8 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
+import { validateLottieJSONFile } from "@/utils";
 import { getUploadQueue } from "../../cache";
 import { setQueue, TAnimationUpload } from "./offlineQueue.slice";
-import { validateLottieJSONFile } from "../../../utils";
 
 export const syncQueueToState = () => async (dispatch: Dispatch) => {
   const queue = getUploadQueue();

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { useAppDispatch, useAppSelector } from "../../rdx/hooks";
-import { setOnlineStatus } from "../../rdx/features/connectivity/connectivity.slice";
+import { useAppDispatch, useAppSelector } from "@/rdx/hooks";
+import { setOnlineStatus } from "@/rdx/features/connectivity/connectivity.slice";
 
 export const useConnectivity = () => {
   const dispatch = useAppDispatch();

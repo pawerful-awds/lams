@@ -1,8 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { useGetAnimationQuery } from "../rdx/services/gql";
-import { AnimationItemDetail, Loader } from "../components";
+import { useGetAnimationQuery } from "@/rdx/services/gql";
+import { AnimationItemDetail, Loader } from "@/components";
 
 const AnimationDetail: React.FC = () => {
   const { animationId } = useParams<{ animationId: string }>();

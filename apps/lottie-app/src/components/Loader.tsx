@@ -1,4 +1,4 @@
-import LottieLoaderData from "../assets/lottie-loader.json";
+import LottieLoaderData from "@/assets/lottie-loader.json";
 import { AnimationViewer } from "./animation";
 
 export const Loader = () => {

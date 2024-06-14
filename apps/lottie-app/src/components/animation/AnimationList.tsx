@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TTransformedGetAnimationsResponse } from "../../rdx/services/gql";
+import { TTransformedGetAnimationsResponse } from "@/rdx/services/gql";
 import { AnimationItemDetail } from "./AnimationItemDetail";
 
 export interface IAnimationListProps {

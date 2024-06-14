@@ -1,4 +1,4 @@
-import { Storage } from "../utils";
+import { Storage } from "@/utils";
 
 import { TAnimationsQueryBaseResponse } from "./services/gql";
 

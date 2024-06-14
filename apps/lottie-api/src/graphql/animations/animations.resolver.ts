@@ -5,7 +5,6 @@ import { db, bucket, admin } from '@/services/firebase';
 
 import type { Animation, Resolvers } from '../types/graphql';
 import { fetchAnimationData } from './utils';
-import { Kind } from 'graphql';
 
 export interface QueryArgs {
   query: string;

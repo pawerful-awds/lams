@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { TAnimationResponse } from "../../services/gql";
 
 export type TAnimationUpload = TAnimationResponse & {
