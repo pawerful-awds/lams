@@ -142,6 +142,7 @@ export const gqlApi = createApi({
               url
               animationData
               createdAt
+              metadata
             }
           }
         `,
@@ -187,6 +188,8 @@ export const gqlApi = createApi({
               title
               url
               animationData
+              createdAt
+              metadata
             }
           }
         `,
