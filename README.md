@@ -27,6 +27,10 @@ The Lottie Animation Management System (LAMS) is a web application that allows u
 ### Demo
 [![Watch the video](app-screen1.png)](https://drive.google.com/file/d/1nK4ONu4SMjimB05HfxKvVzHCRuFbqIjE/preview)
 
+#### Screenshots
+![App Screen 1](./app-screen1.png)
+![App Screen 2](./app-screen2.png)
+![App Screen 3](./app-screen3.png)
 
 ### Tech stack
 - Turborepo: It simplifies managing multiple projects within a single repository. It leverages caching and parallel processing to significantly speed up build times. It allows you to share configurations, scripts, and utility functions across multiple projects
