@@ -21,7 +21,7 @@ const AnimationDetail: React.FC = () => {
         {isLoading && <Loader />}
         {data && (
           <AnimationItemDetail
-            id={data.id}
+            id={data.id ?? "ID not found"}
             title={data.title}
             animationData={data.animationData}
             animationShouldAutoPlay
