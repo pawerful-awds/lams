@@ -39,7 +39,10 @@ export const AnimationList: React.FC<IAnimationListProps> = ({
   data,
   offlineData,
 }) => {
-  if ((!data || data.length === 0) && !offlineData)
+  if (
+    (!data || data.length === 0) &&
+    (!offlineData || offlineData.length === 0)
+  )
     return (
       <p className="flex max-w-[300px] mx-auto my-8 p-4 text-center">
         No animations in the list yet, you may upload your first animation by
