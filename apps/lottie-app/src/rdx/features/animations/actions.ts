@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
 import { validateLottieJSONFile } from "@/utils";
-import { getUploadQueue } from "../../cache";
+import { getUploadQueue, getAnimationsFromCache } from "../../cache";
 import { setQueue, TAnimationUpload } from "./offlineQueue.slice";
 
 export const syncQueueToState = () => async (dispatch: Dispatch) => {
@@ -32,4 +32,28 @@ export const syncQueueToState = () => async (dispatch: Dispatch) => {
 
     dispatch(setQueue(payload));
   }
+};
+
+export const getDetailsFromQueueById = async (id: string) => {
+  const hasOffId = /^off-id/.test(id);
+  if (hasOffId) {
+    const queue = getUploadQueue();
+    const details = queue.find((a) => a.id === id);
+    if (details) {
+      const validFile = await validateLottieJSONFile(details.file);
+      if (validFile.isValid) {
+        return {
+          ...details,
+          metadata: validFile.data?.metadata ?? null,
+          animationData: validFile.data,
+        };
+      }
+    }
+  } else {
+    const details = getAnimationsFromCache();
+    if (details) {
+      return details.find((a) => a.id === id);
+    }
+  }
+  return null;
 };

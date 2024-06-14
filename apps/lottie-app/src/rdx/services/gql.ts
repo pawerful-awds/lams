@@ -3,7 +3,10 @@ import { DocumentNode, print } from "graphql";
 import { gql } from "@apollo/client";
 
 import { clearQueue as clearOfflineAnimationQueue } from "../features/animations";
-import { syncQueueToState } from "../features/animations/actions";
+import {
+  getDetailsFromQueueById,
+  syncQueueToState,
+} from "../features/animations/actions";
 import {
   getAnimationsFromCache,
   saveAnimationsToCache,
@@ -86,6 +89,14 @@ const gqlBaseQuery: BaseQueryFn<
     // Return the cached result if its offline
     if (queryName === "getAnimations" && !navigator.onLine) {
       const cached = getAnimationsFromCache();
+      if (cached) {
+        return { data: cached };
+      }
+    }
+
+    if (queryName === "getAnimation" && !navigator.onLine) {
+      const cached = await getDetailsFromQueueById(variables.id);
+      console.log("# cached", cached);
       if (cached) {
         return { data: cached };
       }
@@ -200,9 +211,10 @@ export const gqlApi = createApi({
       transformResponse: (
         response: TAnimationsQueryResponse["getAnimation"]
       ): TTransformedGetAnimationResponse => {
-        const animationData = response.animationData
-          ? { ...JSON.parse(response.animationData) }
-          : null;
+        const animationData =
+          response.animationData && typeof response.animationData === "string"
+            ? { ...JSON.parse(response.animationData) }
+            : response.animationData ?? null;
 
         return {
           ...response,
