@@ -1,5 +1,6 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
+import { apiBaseUrl } from "@/config";
 import { validateLottieJSONFile } from "@/utils";
 import { getUploadQueue, getAnimationsFromCache } from "../../cache";
 import { setQueue, TAnimationUpload } from "./offlineQueue.slice";
@@ -28,7 +29,6 @@ export const syncQueueToState = () => async (dispatch: Dispatch) => {
     );
 
     const payload = await Promise.resolve(queueData);
-    console.log("# queueData", payload);
 
     dispatch(setQueue(payload));
   }
@@ -56,4 +56,44 @@ export const getDetailsFromQueueById = async (id: string) => {
     }
   }
   return null;
+};
+
+export const downloadAnimationFile = async (id: string) => {
+  try {
+    const response = await fetch(`${apiBaseUrl}/v1/download/${id}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Oops, something is wrong with the download");
+    }
+
+    const blob = await response.blob();
+    const contentDisposition = response.headers.get("Content-Disposition");
+    let fileName = "animation";
+
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="?(.+)"?/);
+      if (match && match.length === 2) {
+        fileName = match[1];
+      }
+    }
+
+    // Prepare for the blob and link it to <a>
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.setAttribute("download", fileName);
+
+    // Append link to the body
+    document.body.appendChild(link);
+    // Trigger the download by simulating to click the link
+    link.click();
+
+    // Remove the link and bloburl
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (error) {
+    console.error("Error downloading the file:", error);
+  }
 };

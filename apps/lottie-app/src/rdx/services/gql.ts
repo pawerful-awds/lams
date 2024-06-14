@@ -2,6 +2,8 @@ import { createApi, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import { DocumentNode, print } from "graphql";
 import { gql } from "@apollo/client";
 
+import { apiBaseUrl } from "@/config";
+
 import { clearQueue as clearOfflineAnimationQueue } from "../features/animations";
 import {
   getDetailsFromQueueById,
@@ -64,7 +66,7 @@ const gqlUploadQuery: BaseQueryFn<
     formData.append("map", JSON.stringify({ "0": ["variables.file"] }));
     formData.append("0", variables.file);
 
-    const response = await fetch("http://localhost:4000/graphql", {
+    const response = await fetch(`${apiBaseUrl}/graphql`, {
       headers: {
         "x-apollo-operation-name": "UploadAnimation",
       },
@@ -102,7 +104,7 @@ const gqlBaseQuery: BaseQueryFn<
       }
     }
 
-    const response = await fetch("http://localhost:4000/graphql", {
+    const response = await fetch(`${apiBaseUrl}/graphql`, {
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
