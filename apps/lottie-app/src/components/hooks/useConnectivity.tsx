@@ -14,6 +14,10 @@ export const useConnectivity = () => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
+    if (navigator.onLine) {
+      handleOnline();
+    }
+
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
