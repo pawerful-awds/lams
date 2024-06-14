@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { AnimationViewer } from "./AnimationViewer";
 
@@ -16,8 +16,9 @@ export const AnimationItemDetail: React.FC<IAnimationItemDetailProps> = ({
   title,
   animationShouldAutoPlay = false,
 }) => {
+  const location = useLocation();
   return (
-    <article className="relative w-full transition duration-100 ease-out bg-white border border-gray-100 rounded-md animation-card overflow-hidden group p-4">
+    <article className="relative w-full transition duration-100 ease-out bg-white border border-stroke-neutral rounded-md animation-card overflow-hidden group p-4">
       <AnimationViewer
         animationData={animationData}
         shouldAutoplay={animationShouldAutoPlay}
@@ -26,7 +27,14 @@ export const AnimationItemDetail: React.FC<IAnimationItemDetailProps> = ({
       />
       <div>
         {id ? <h4 className="text-[0.6em]">{id}</h4> : null}
-        {title ? <Link to={`/animation/${id}`}>{title}</Link> : null}
+        {title ? (
+          <Link
+            to={`/animation/${id}`}
+            state={{ backgroundLocation: location }}
+          >
+            {title}
+          </Link>
+        ) : null}
       </div>
     </article>
   );
