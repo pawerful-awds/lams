@@ -4,28 +4,6 @@ import { motion } from "framer-motion";
 import { Portal } from "./Portal";
 import { Backdrop } from "./Backdrop";
 
-const dropIn = {
-  hidden: {
-    y: "100vh",
-    opacity: 0,
-  },
-  visible: {
-    y: "0%",
-    opacity: 1,
-    transition: {
-      duration: 0.7,
-      type: "spring",
-      // damping: 30,
-      // stiffness: 700,
-      // mass: 1.5,
-    },
-  },
-  exit: {
-    y: "100vh",
-    opacity: 0,
-  },
-};
-
 const slideLeft = {
   hidden: {
     x: "100vw",
