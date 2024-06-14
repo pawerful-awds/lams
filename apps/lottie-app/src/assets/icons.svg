@@ -1,0 +1,60 @@
+<svg width="0" height="0">
+<defs>
+    <symbol
+      viewBox="-4 -2 24 24"
+      id="icons-sprite_svg__lottie-workspace-fill"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    ><path
+        id="icons-sprite_svg__Subtract"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M15.489 7.566c0-.601-.24-1.178-.665-1.603l-1.49-1.488-2.96-2.86A2.265 2.265 0 008.802.98H2.897A2.084 2.084 0 00.813 3.063v13.954c0 1.15.933 2.084 2.084 2.084h10.508c1.15 0 2.084-.933 2.084-2.084V7.566z"
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-width="1.525"
+        stroke-linejoin="round"
+      /><path
+        id="icons-sprite_svg__Vector"
+        d="M11.053 10.072a.708.708 0 00.655-.436l-.132-.055.132.055a.705.705 0 00.054-.27v-.001a.707.707 0 00-.709-.706c-1.023 0-1.733.366-2.26.882-.517.507-.854 1.155-1.145 1.712l-.004.01-.383.72h0c-.312.6-.574 1.059-.898 1.371-.315.304-.693.472-1.256.472a.709.709 0 00-.708.707h0a.707.707 0 00.708.706h0c1.024 0 1.734-.366 2.26-.882.518-.507.855-1.155 1.146-1.712l.004-.01h0l.382-.72h0c.313-.6.575-1.059.898-1.371.315-.304.694-.472 1.256-.472zm0 0s0 0 0 0v-.143.143s0 0 0 0z"
+        fill="#fff"
+        stroke="#fff"
+        stroke-width="0.286"
+      /></symbol>
+    <symbol
+      viewBox="0 0 24 24"
+      fill="none"
+      id="icons-sprite_svg__lottie-creator-draft-fill"
+      xmlns="http://www.w3.org/2000/svg"
+    ><path
+        id="icons-sprite_svg__Subtract"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M17.944 9.541c0-.59-.233-1.158-.649-1.578l-1.46-1.476-2.886-2.823c-.42-.41-.982-.64-1.569-.64H5.647c-1.14 0-2.065.925-2.065 2.065v13.823c0 1.14.924 2.064 2.065 2.064h10.232c1.14 0 2.065-.924 2.065-2.064v-9.37z"
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-width="1.498"
+        stroke-linejoin="round"
+      /><circle
+        id="icons-sprite_svg__Ellipse_2788"
+        cx="17.914"
+        cy="11.939"
+        r="2.509"
+        fill="#fff"
+        stroke="currentColor"
+        stroke-width="1.498"
+      /><path
+        id="icons-sprite_svg__Vector_2568"
+        d="M9.57 17.742c0-1.729 1.617-3.717 3.168-4.21"
+        stroke="#fff"
+        stroke-width="1.498"
+        stroke-linecap="round"
+      /><path
+        id="icons-sprite_svg__Vector_2569"
+        d="M4.443 10.571c1.023.3 5.128 2.78 5.128 7.175"
+        stroke="#fff"
+        stroke-width="1.498"
+        stroke-linecap="round"
+      /></symbol>
+    </defs>
+</svg>

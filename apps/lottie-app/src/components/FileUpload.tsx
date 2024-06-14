@@ -49,10 +49,10 @@ export const FileUpload: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center rounded-md bg-subject-primary p-2 px-4 cursor-pointer">
+    <div className="flex flex-col justify-center items-center rounded-md bg-subject-primary cursor-pointer">
       <label
         htmlFor="fileUpload"
-        className="block font-medium text-white cursor-pointer"
+        className="block font-medium text-white cursor-pointer p-2 px-4 "
       >
         Upload Animation
       </label>

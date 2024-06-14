@@ -2,6 +2,10 @@ import React from "react";
 
 import { TTransformedGetAnimationsResponse } from "@/rdx/services/gql";
 import { AnimationItemDetail } from "./AnimationItemDetail";
+import { Pill } from "../Pill";
+
+import IconWorkspace from "@/assets/icon-workspace.svg";
+import IconDraft from "@/assets/icon-draft.svg";
 
 export interface IAnimationListProps {
   data?: TTransformedGetAnimationsResponse;
@@ -11,17 +15,30 @@ export interface IAnimationListProps {
 interface IAnimationListSectionProps extends React.PropsWithChildren {
   heading?: string;
   hasDivider?: boolean;
+  drafts?: boolean;
 }
 
 const AnimationListSection = ({
   children,
   heading,
   hasDivider = false,
+  drafts = false,
 }: IAnimationListSectionProps) => {
   return (
     <section className="flex flex-col w-full gap-4">
       {heading && (
-        <h3 className="font-lf-semi-bold text-lg text-left text-gray-900">
+        <h3 className="flex gap-2 justify-start items-center font-lf-semi-bold text-lg text-left text-gray-900">
+          {drafts ? (
+            <img
+              src={IconDraft}
+              className="w-[1.5rem] h-[1.5rem] text-subject-primary"
+            />
+          ) : (
+            <img
+              src={IconWorkspace}
+              className="w-[1.5rem] h-[1.5rem] text-subject-primary"
+            />
+          )}
           {heading}
         </h3>
       )}
@@ -50,10 +67,14 @@ export const AnimationList: React.FC<IAnimationListProps> = ({
       </p>
     );
 
-  const renderItems = (items: TTransformedGetAnimationsResponse) => {
+  const renderItems = (
+    items: TTransformedGetAnimationsResponse,
+    draft: boolean = false
+  ) => {
     return items.map(({ id, title, animationData }) => {
       return (
-        <div key={id} className="">
+        <div key={id} className="relative">
+          {draft && <Pill text="Draft" float />}
           <AnimationItemDetail
             id={id ?? "ID not found"}
             title={title}
@@ -67,12 +88,14 @@ export const AnimationList: React.FC<IAnimationListProps> = ({
   return (
     <>
       {offlineData && offlineData.length > 0 && (
-        <AnimationListSection heading="Offline drafts" hasDivider>
-          {renderItems(offlineData)}
+        <AnimationListSection heading="Offline drafts" hasDivider drafts>
+          {renderItems(offlineData, true)}
         </AnimationListSection>
       )}
       {data && data.length > 0 && (
-        <AnimationListSection>{renderItems(data)}</AnimationListSection>
+        <AnimationListSection heading="Uploaded ">
+          {renderItems(data)}
+        </AnimationListSection>
       )}
     </>
   );

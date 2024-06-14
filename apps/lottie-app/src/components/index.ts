@@ -6,3 +6,4 @@ export * from "./Loader";
 export * from "./Backdrop";
 export * from "./Portal";
 export * from "./Modal";
+export * from "./Pill";

@@ -3,13 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CopyBlock } from "react-code-blocks";
 
 import { useGetAnimationQuery } from "@/rdx/services/gql";
-import { AnimationViewer, Loader, Modal } from "@/components";
+import { AnimationViewer, Loader, Modal, Pill } from "@/components";
 
 const AnimationDetail: React.FC = () => {
   const { animationId } = useParams<{ animationId: string }>();
   const { data, error, isLoading } = useGetAnimationQuery({
     id: animationId ?? "",
   });
+
+  const isDraft = /^off-id/.test(animationId ?? "");
 
   return (
     <div className="flex flex-col p-4">
@@ -28,8 +30,15 @@ const AnimationDetail: React.FC = () => {
               />
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <div className="text-sm text-subject-primary">
-                    Animation Id:{" "}
+                  <div className="flex flex-col text-sm text-subject-primary">
+                    <div className="flex gap-2 items-center">
+                      Animation Id: {isDraft && <Pill text="Draft" />}
+                    </div>
+                    {isDraft && (
+                      <span className="text-black">
+                        {`This is a temporary offline Id only (Once uploaded it'll be updated)`}
+                      </span>
+                    )}
                   </div>
                   {data.title ? (
                     <CopyBlock

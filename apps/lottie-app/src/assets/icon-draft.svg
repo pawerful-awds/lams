@@ -1,0 +1,30 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path
+    id="icons-sprite_svg__Subtract"
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M17.944 9.541c0-.59-.233-1.158-.649-1.578l-1.46-1.476-2.886-2.823c-.42-.41-.982-.64-1.569-.64H5.647c-1.14 0-2.065.925-2.065 2.065v13.823c0 1.14.924 2.064 2.065 2.064h10.232c1.14 0 2.065-.924 2.065-2.064v-9.37z"
+    fill="#ffffff"
+    stroke="#000"
+    stroke-width="1.498"
+    stroke-linejoin="round"
+  /><circle
+    id="icons-sprite_svg__Ellipse_2788"
+    cx="17.914"
+    cy="11.939"
+    r="2.509"
+    fill="#fff"
+    stroke="#000"
+    stroke-width="1.498"
+  /><path
+    id="icons-sprite_svg__Vector_2568"
+    d="M9.57 17.742c0-1.729 1.617-3.717 3.168-4.21"
+    stroke="#000"
+    stroke-width="1.498"
+    stroke-linecap="round"
+  /><path
+    id="icons-sprite_svg__Vector_2569"
+    d="M4.443 10.571c1.023.3 5.128 2.78 5.128 7.175"
+    stroke="#000"
+    stroke-width="1.498"
+    stroke-linecap="round"
+  /></svg>
