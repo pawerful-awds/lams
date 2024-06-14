@@ -1,6 +1,6 @@
 import { createApi, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import { DocumentNode, print } from "graphql";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 import {
   getAnimationsFromCache,
@@ -8,12 +8,18 @@ import {
   saveUploadToQueue,
 } from "../cache";
 
+import { animationsTag } from "./tags";
+import { clearQueue as clearOfflineAnimationQueue } from "../features/animations";
+import { syncQueueToState } from "../features/animations/actions";
+
 export type TAnimationResponse = {
   title: string;
-  id: string;
-  url: string;
-  animationData: Record<string, TODO> | null;
-  createdAt: TODO;
+  id?: string;
+  url?: string;
+  animationData: { [x: string]: TODO } | null;
+  createdAt?: TODO;
+  metadata?: string;
+  inQueue?: boolean;
 };
 
 export type TAnimationsQueryBaseResponse = Omit<
@@ -31,17 +37,23 @@ export type TAnimationsQueryResponse = {
 export type TTransformedGetAnimationsResponse = TAnimationResponse[];
 export type TTransformedGetAnimationResponse = TAnimationResponse;
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-});
-
 const gqlUploadQuery: BaseQueryFn<
   { document: DocumentNode; variables?: TODO; queryName: string },
   unknown,
   { error: TODO }
 > = async ({ document, variables, queryName }) => {
   try {
+    // Cache the uploaded file if its offline
+    if (queryName === "uploadAnimation" && !navigator.onLine) {
+      await saveUploadToQueue(variables);
+      return {
+        data: {
+          inQueue: true,
+        },
+      };
+    }
+
+    // Prepare form data
     const formData = new FormData();
     formData.append(
       "operations",
@@ -57,13 +69,10 @@ const gqlUploadQuery: BaseQueryFn<
       method: "POST",
       body: formData,
     });
-    const respData = await response.json();
-    if (respData.errors) {
-      if (!navigator.onLine) {
-        throw new Error("OFFLINE");
-      }
-    }
-    return { data: respData.data };
+
+    const result = await response.json();
+
+    return { data: result.data };
   } catch (error) {
     return { error: error as TODO };
   }
@@ -78,25 +87,41 @@ const gqlBaseQuery: BaseQueryFn<
     // Return the cached result if its offline
     if (queryName === "getAnimations" && !navigator.onLine) {
       const cached = getAnimationsFromCache();
-      if (cached.length > 0) {
+      if (cached) {
         return { data: cached };
       }
     }
 
-    const result = await client.query({
-      query: document,
-      variables,
+    const response = await fetch("http://localhost:4000/graphql", {
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        query: print(document),
+        variables,
+      }),
     });
 
-    const res = result.data[queryName];
+    const result = await response.json();
 
-    // Cache the result if query went through, means that its online
-    if (queryName === "getAnimations" && result.data) {
-      saveAnimationsToCache(res);
+    const data = result.data[queryName];
+
+    // Cache the response if query went through, means that its online and with success response
+    if (queryName === "getAnimations" && data) {
+      saveAnimationsToCache(data);
     }
 
-    return { data: res };
+    return { data };
   } catch (error) {
+    console.error("# gqlBaseQuery error", error);
+    // // if returns a resp error, try to load from cache
+    // // TODO: handle error and display necessary messages accordingly
+    const cached = getAnimationsFromCache();
+    if (cached) {
+      return { data: cached };
+    }
     return { error: error as TODO };
   }
 };
@@ -104,7 +129,7 @@ const gqlBaseQuery: BaseQueryFn<
 export const gqlApi = createApi({
   reducerPath: "gqlApi",
   baseQuery: gqlBaseQuery,
-  tagTypes: ["tag:animations"],
+  tagTypes: [animationsTag as string],
   endpoints: (builder) => ({
     // Get Animations
     getAnimations: builder.query<TTransformedGetAnimationsResponse, void>({
@@ -136,7 +161,17 @@ export const gqlApi = createApi({
           };
         });
       },
-      providesTags: ["tag:animations"],
+      // providesTags: ["tag:animations"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({
+                type: animationsTag,
+                id,
+              })),
+              { type: animationsTag, id: "list" },
+            ]
+          : [{ type: animationsTag, id: "list" }],
     }),
 
     // Get Single Animation
@@ -200,7 +235,7 @@ export const gqlApi = createApi({
 export const gqlUploadApi = createApi({
   reducerPath: "gqlUploadApi",
   baseQuery: gqlUploadQuery,
-  tagTypes: ["tag:animations"],
+  tagTypes: [animationsTag],
   endpoints: (builder) => ({
     // Upload animation
     uploadAnimation: builder.mutation<
@@ -225,18 +260,28 @@ export const gqlUploadApi = createApi({
         `,
         variables: { file, metadata, title },
       }),
-      onQueryStarted: async (data, { queryFulfilled }) => {
-        console.log("# uploadAnimation started");
+      onQueryStarted: async (data, { dispatch, queryFulfilled }) => {
         try {
-          await queryFulfilled;
+          const { data: result } = await queryFulfilled;
+          // check if result has inQueue, if present and true then need to fetch from cache and load it in the reducer
+          if (result.inQueue) {
+            syncQueueToState()(dispatch);
+          } else {
+            dispatch(clearOfflineAnimationQueue());
+          }
+
+          // Invalidate getAnimations list on every successful upload / mutation
+          dispatch(
+            gqlApi.util.invalidateTags([{ type: animationsTag, id: "list" }])
+          );
         } catch {
+          // Cache the data if in the middle of api call suddenly got offline
           if (!navigator.onLine) {
-            console.log("# upload offline", data);
+            console.log("# upload offline");
             saveUploadToQueue(data);
           }
         }
       },
-      invalidatesTags: ["tag:animations"],
     }),
   }),
 });
