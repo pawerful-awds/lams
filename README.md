@@ -27,6 +27,9 @@ The Lottie Animation Management System (LAMS) is a web application that allows u
 ### Demo
 [![Watch the video](app-screen1.png)](https://drive.google.com/file/d/1nK4ONu4SMjimB05HfxKvVzHCRuFbqIjE/preview)
 
+### Architecture
+![App Architecture](./arch-diagram0.png)
+
 #### Screenshots
 ![App Screen 1](./app-screen1.png)
 ![App Screen 2](./app-screen2.png)
@@ -47,17 +50,19 @@ The Lottie Animation Management System (LAMS) is a web application that allows u
 #### Backend
 - Node.js
 - Express
-- GraphQL
+- GraphQL, Apollo
 - Firebase
+- Please see backend documentation [here](./apps/lottie-api/README.md)
 
 #### Frontend
 - React
-- Redux, RTK
+- Redux, RTK, Apollo
 - React Router v6
 - Tailwind CSS
 - Workbox
 - Framer Motion
 - Vite
+- Please see frontend documentation [here](./apps/lottie-app/README.md)
 
 #### Project Structure
 ```

@@ -12,6 +12,9 @@ The approach is to combine Express, TypeScript, Firebase, and GraphQL, it levera
     - GraphQL's type system complements TypeScript, ensuring robust schema definitions and query validations. By using a script to generate the types being used in the schemas
     - Using Apollo for easy interactions with Graphql APIs
 
+## Architecure
+![Architecure Diagram Backend](./arch-diagram1.png)
+
 ## APIs
 ### GraphQL Url
 `http://localhost:4000/graphql`

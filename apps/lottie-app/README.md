@@ -4,6 +4,9 @@
 
 The FE of this web app is built using React, with additional libraries and tools such as Vite, Redux Toolkit, Tailwind CSS, React Router V6, Workbox, and Framer Motion to create a robust, offline-first Lottie Animation Management System. The goal is to provide users with the ability to fetch, preview, upload, and download Lottie animations, with detailed metadata and offline capabilities.
 
+## Architecure
+![Architecure Diagram Frontend](./arch-diagram2.png)
+
 ## Technologies
 - React: Core library for building user interfaces.
 - Vite: Fast build tool and development server.
@@ -77,6 +80,8 @@ The application allows to upload animation files, which are cached locally and s
 ### Things to improve
 - [ ] Create mini UI library to handle component system, themes, and UI config, this is also to minimise repeatition of codes esp function components and class names
 - [ ] Handle error within the app
+- [ ] Add Create animation flow not just upload but able to add more details like other fields and etc
+- [ ] Encrypt localstorage items, once a record is stored then decrypt when viewing or being uploaded to backend
 - [ ] Implement user session
 - [ ] Improve `types` esp with `TODO`s
 - [ ] Tailwind extend config with more tokens
