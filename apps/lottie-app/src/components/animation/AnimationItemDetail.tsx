@@ -19,12 +19,12 @@ export const AnimationItemDetail: React.FC<IAnimationItemDetailProps> = ({
   const location = useLocation();
   return (
     <article className="relative w-full transition duration-100 ease-out bg-white border border-stroke-neutral rounded-md animation-card overflow-hidden group p-4">
-      <AnimationViewer
-        animationData={animationData}
-        shouldAutoplay={animationShouldAutoPlay}
-        width={200}
-        height={200}
-      />
+      <div className="w-full h-[200px]">
+        <AnimationViewer
+          animationData={animationData}
+          shouldAutoplay={animationShouldAutoPlay}
+        />
+      </div>
       <div>
         {id ? <h4 className="text-[0.6em]">{id}</h4> : null}
         {title ? (

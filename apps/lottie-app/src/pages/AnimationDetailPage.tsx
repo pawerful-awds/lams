@@ -30,12 +30,14 @@ const AnimationDetail: React.FC = () => {
           {isLoading && <Loader />}
           {data && (
             <>
-              <AnimationViewer
-                animationData={data.animationData}
-                shouldAutoplay
-                width={300}
-                height={300}
-              />
+              <div className="w-full h-[300px]">
+                <AnimationViewer
+                  animationData={data.animationData}
+                  shouldAutoplay
+                  showControls
+                  playOnHover={false}
+                />
+              </div>
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col text-sm text-subject-primary">

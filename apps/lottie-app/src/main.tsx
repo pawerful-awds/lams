@@ -7,6 +7,8 @@ import { registerSW } from "virtual:pwa-register";
 import store from "./rdx/store.ts";
 import { syncQueueToState } from "./rdx/features/animations/actions.ts";
 import { AppRoutes } from "./router";
+
+import "@dotlottie/react-player/dist/index.css";
 import "./index.css";
 
 registerSW({

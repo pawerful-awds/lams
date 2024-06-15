@@ -1,12 +1,16 @@
 import React from "react";
-import Lottie from "react-lottie";
+import {
+  DotLottiePlayer,
+  Controls,
+  DotLottieCommonPlayer,
+} from "@dotlottie/react-player";
 
 export interface IAnimationViewerProps {
-  width?: number;
-  height?: number;
   animationData: Record<string, TODO> | null;
   shouldAutoplay?: boolean;
   noPause?: boolean;
+  showControls?: boolean;
+  playOnHover?: boolean;
 }
 
 const deepClone = (obj: TODO): Record<string, TODO> => {
@@ -24,28 +28,29 @@ const deepClone = (obj: TODO): Record<string, TODO> => {
 };
 
 export const AnimationViewer: React.FC<IAnimationViewerProps> = ({
-  width = 300,
-  height = 300,
   animationData,
   shouldAutoplay = false,
-  noPause = false,
+  showControls,
+  playOnHover = true,
 }) => {
-  const defaultOptions = {
-    loop: true,
-    autoplay: shouldAutoplay,
-    animationData: deepClone(animationData) ?? {},
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+  const dotLottieRef = React.useRef<DotLottieCommonPlayer>(null);
+
+  React.useEffect(() => {
+    if (dotLottieRef.current) {
+      dotLottieRef.current.setHover(playOnHover);
+    }
+  }, [playOnHover]);
+
   return (
-    <div>
-      <Lottie
-        options={defaultOptions}
-        height={height}
-        width={width}
-        isClickToPauseDisabled={noPause}
-      />
+    <div className="flex justify-center items-center w-full h-full">
+      <DotLottiePlayer
+        ref={dotLottieRef}
+        src={deepClone(animationData) ?? {}}
+        autoplay={shouldAutoplay}
+        loop
+      >
+        {showControls && <Controls />}
+      </DotLottiePlayer>
     </div>
   );
 };
