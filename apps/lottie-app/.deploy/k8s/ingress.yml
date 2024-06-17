@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lams-app-ingress
+  namespace: ${ENVIRONMENT}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+    - host: ${ENVIRONMENT}-app.lams.appwwwards.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: lams-app-service
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - ${ENVIRONMENT}-app.lams.appwwwards.com
+      secretName: ${ENVIRONMENT}-app.lams.appwwwards.com

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lams-api
+  namespace: ${ENVIRONMENT}
+  labels:
+    app: lams-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lams-api
+  template:
+    metadata:
+      labels:
+        app: lams-api
+    spec:
+      containers:
+        - name: lams-api
+          image: ${DOCKER_IMAGE_PATH}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+          env:
+            - name: FIREBASE_PROJECT_ID
+              value: ${FIREBASE_PROJECT_ID}
+            - name: FIREBASE_CLIENT_EMAIL
+              value: ${FIREBASE_CLIENT_EMAIL}
+            - name: FIREBASE_SERVICE_PRIVATE_KEY
+              value: ${FIREBASE_SERVICE_PRIVATE_KEY}
+            - name: NODE_ENV
+              value: production

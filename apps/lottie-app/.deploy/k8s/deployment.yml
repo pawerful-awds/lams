@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lams-app
+  namespace: ${ENVIRONMENT}
+  labels:
+    app: lams-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lams-app
+  template:
+    metadata:
+      labels:
+        app: lams-app
+    spec:
+      containers:
+        - name: lams-app
+          image: ${DOCKER_IMAGE_PATH}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: VITE_API_BASE_URL
+              value: https://${ENVIRONMENT}-api.lams.appwwwards.com
