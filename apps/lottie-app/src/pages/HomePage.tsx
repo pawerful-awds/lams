@@ -1,13 +1,9 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 
 import { useGetAnimationsQuery } from "@/rdx/services/gql";
 import { Loader, AnimationList, useGetOfflineQueueData } from "@/components";
 
 const HomePage: React.FC = () => {
-  const [searchParams] = useSearchParams();
-
-  const q = searchParams.get("q");
   const { data: getAnimationsData, isLoading } = useGetAnimationsQuery();
   const { data: offlineData } = useGetOfflineQueueData();
 

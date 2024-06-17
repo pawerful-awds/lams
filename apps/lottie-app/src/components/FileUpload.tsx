@@ -11,7 +11,7 @@ export type TUploadObject = {
 
 export const FileUpload: React.FC = () => {
   const [uploadAnimation] = useUploadAnimationMutation();
-  const [file, setFile] = React.useState<File | null>(null);
+  const [, setFile] = React.useState<File | null>(null);
 
   async function validateAndUpload(upload: TUploadObject): Promise<void>;
   async function validateAndUpload(file: File): Promise<void>;
