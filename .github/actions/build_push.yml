@@ -1,0 +1,41 @@
+name: 'Tag Builder and Docker Push'
+description: 'Builds a Docker image, tags it, and pushes it to Amazon ECR.'
+inputs:
+  registry:
+    description: 'Docker image registry URL'
+    required: true
+  repository:
+    description: 'Docker image repository name'
+    required: true
+  image_tag:
+    description: 'Docker image tag name to be pushed to registry'
+    required: true
+  dockerfile: 
+    description: 'Dockerfile path'
+    required: true
+outputs:
+  dockerImage:
+    description: 'Docker image tag and label'
+runs:
+  using: 'docker'
+  image: 'docker:latest'
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Build, tag, and push Docker image
+      env:
+        REGISTRY: ${{ inputs.registry }}
+        REPOSITORY: ${{ inputs.repository }}
+        IMAGE_TAG: ${{ inputs.image_tag }}
+        FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+        FIREBASE_CLIENT_EMAIL: ${{ vars.FIREBASE_CLIENT_EMAIL }}
+        FIREBASE_SERVICE_PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_PRIVATE_KEY }}
+      run: |
+        docker build \
+           --build-arg="FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}" \
+            --build-arg="FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}" \
+            --build-arg="FIREBASE_SERVICE_PRIVATE_KEY=${FIREBASE_SERVICE_PRIVATE_KEY}" \
+          -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ${{ inputs.dockerfile }} .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        echo "dockerImage=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"

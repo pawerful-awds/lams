@@ -1,0 +1,104 @@
+name: LAMS CICD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+env:
+  NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  pre-deploy:
+    name: pre-deploy
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Node.js Version
+        uses: actions/setup-node@v3
+        with:
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@pawerful-awds"
+      - name: Creating .npmrc file 
+        # this is for the mono release strategy, to be added later
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" >> .npmrc
+          echo "@pawerful-awds:registry=https://npm.pkg.github.com" >> .npmrc
+
+  deploy-api-dev:
+    name: deploy-api-dev
+    if: contains('refs/heads/main', github.ref)
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup k8s
+        id: k8s
+        uses: ./.github/actions/setup_k8s
+        with:
+          aws-region: 'ap-southeast-1'
+     
+      - name: (API) Build, tag, and push docker image to Amazon ECR
+        id: buildTag
+        uses: ./.github/actions/build_push
+        with:
+          registry: ${{ steps.k8s.outputs.dockerRegistry }}
+          repository: lams-api
+          image_tag: main-${{ github.sha }}
+          dockerfile: apps/lottie-api/.deploy/Dockerfile
+
+      - name: (API) Deploy to EKS
+        env:
+          DOCKER_IMAGE_PATH: ${{ steps.buildTag.outputs.dockerImage }}
+          ENVIRONMENT: dev
+        run: |
+          envsubst < apps/lottie-api/.deploy/k8s/service.yml | kubectl apply -f -
+          envsubst < apps/lottie-api/.deploy/k8s/ingress.yml | kubectl apply -f -
+          envsubst < apps/lottie-api/.deploy/k8s/deployment.yml | kubectl apply -f -
+  
+  deploy-app-dev:
+    name: deploy-app-dev
+    if: contains('refs/heads/main', github.ref)
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup k8s
+        id: k8s
+        uses: ./.github/actions/setup_k8s
+        with:
+          aws-region: 'ap-southeast-1'
+     
+      - name: (APP) Build, tag, and push docker image to Amazon ECR
+        id: buildTag
+        uses: ./.github/actions/build_push
+        with:
+          registry: ${{ steps.k8s.outputs.dockerRegistry }}
+          repository: lams-app
+          image_tag: main-${{ github.sha }}
+          dockerfile: apps/lottie-app/.deploy/Dockerfile
+
+      - name: (APP) Deploy to EKS
+        env:
+          DOCKER_IMAGE_PATH: ${{ steps.buildTag.outputs.dockerImage }}
+          ENVIRONMENT: dev
+        run: |
+          envsubst < apps/lottie-app/.deploy/k8s/service.yml | kubectl apply -f -
+          envsubst < apps/lottie-app/.deploy/k8s/ingress.yml | kubectl apply -f -
+          envsubst < apps/lottie-app/.deploy/k8s/deployment.yml | kubectl apply -f -
