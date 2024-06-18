@@ -28,14 +28,7 @@ runs:
         REGISTRY: ${{ inputs.registry }}
         REPOSITORY: ${{ inputs.repository }}
         IMAGE_TAG: ${{ inputs.image_tag }}
-        FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-        FIREBASE_CLIENT_EMAIL: ${{ vars.FIREBASE_CLIENT_EMAIL }}
-        FIREBASE_SERVICE_PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_PRIVATE_KEY }}
       run: |
-        docker build \
-           --build-arg="FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}" \
-            --build-arg="FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}" \
-            --build-arg="FIREBASE_SERVICE_PRIVATE_KEY=${FIREBASE_SERVICE_PRIVATE_KEY}" \
-          -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ${{ inputs.dockerfile }} .
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ${{ inputs.dockerfile }} .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
         echo "dockerImage=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
