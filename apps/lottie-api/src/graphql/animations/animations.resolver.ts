@@ -136,7 +136,7 @@ const uploadAnimation = async (
 
   const url = `https://storage.googleapis.com/${bucket.name}/animations/${fileId}-${title}`;
 
-  const newAnimation: Animation = { id: fileId, title, metadata, url, createdAt: admin.firestore.Timestamp.now() };
+  const newAnimation: Animation = { id: fileId, title, metadata, url, createdAt: Date.now() };
   await db.collection('animations').doc(fileId).set(newAnimation);
   return newAnimation;
 };

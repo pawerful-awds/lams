@@ -11,7 +11,7 @@ const schemaFilesPath = path.resolve(__dirname, './**/*.graphql');
 const typeDefsArray = loadFilesSync(schemaFilesPath);
 const mergedTypeDefs = mergeTypeDefs(typeDefsArray);
 
-const resolversFilesPath = path.resolve(__dirname, './**/*.resolver.ts');
+const resolversFilesPath = path.resolve(__dirname, './**/*.resolver.*');
 const resolversArray = loadFilesSync(resolversFilesPath);
 const mergedResolvers = mergeResolvers(resolversArray);
 
