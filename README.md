@@ -122,5 +122,10 @@ pnpm build
 
 ### CICD
 Utilising Github Actions and Workflow for a simple CI/CD.
+- AWS 
+- Elastic Kubernetes Service
+- Docker / ECR
+- Github Actions / Workflow
+- GoDaddy - subdomain from existing DNS
 
 ![CIC](./cicd-diagram.png)
