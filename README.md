@@ -25,6 +25,11 @@ The Lottie Animation Management System (LAMS) is a web application that allows u
 - [ ] Deployment
 
 ### Demo
+
+#### Test URL
+https://dev-app.lams.appwwwards.com/
+
+#### Video
 [![Watch the video](app-screen1.png)](https://drive.google.com/file/d/1nK4ONu4SMjimB05HfxKvVzHCRuFbqIjE/preview)
 
 ### Architecture
