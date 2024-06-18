@@ -16,6 +16,7 @@ inputs:
 outputs:
   dockerImage:
     description: 'Docker image tag and label'
+    value: ${{ steps.build-tag.outputs.dockerImage }}
 runs:
   using: 'composite'
   steps:
@@ -23,6 +24,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: Build, tag, and push Docker image
+      id: build-tag
       env:
         REGISTRY: ${{ inputs.registry }}
         REPOSITORY: ${{ inputs.repository }}
