@@ -20,6 +20,7 @@ inputs:
 outputs:
   dockerRegistry:
     description: 'Docker registry thru AWS ECR'
+    value: ${{ steps.login-ecr.outputs.registry }}
 runs:
   using: 'composite'
   steps:
@@ -46,6 +47,3 @@ runs:
       run: |
         aws eks update-kubeconfig --region ${{ inputs.aws-region }} --name ${{ inputs.eks-cluster-name }}
         kubectl get namespace
-    - name: Set registry output
-      shell: bash
-      run: echo "dockerRegistry=${{steps.login-ecr.outputs.registry}}" >> "$GITHUB_OUTPUT"
