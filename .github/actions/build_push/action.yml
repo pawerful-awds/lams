@@ -17,8 +17,7 @@ outputs:
   dockerImage:
     description: 'Docker image tag and label'
 runs:
-  using: 'docker'
-  image: 'docker:latest'
+  using: 'composite'
   steps:
     - name: Check out repository
       uses: actions/checkout@v2
