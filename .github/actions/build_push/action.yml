@@ -28,6 +28,7 @@ runs:
         REGISTRY: ${{ inputs.registry }}
         REPOSITORY: ${{ inputs.repository }}
         IMAGE_TAG: ${{ inputs.image_tag }}
+      shell: bash
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ${{ inputs.dockerfile }} .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG

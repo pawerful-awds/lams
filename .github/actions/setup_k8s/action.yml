@@ -42,8 +42,10 @@ runs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Update kubeconfig and get namespaces
+      shell: bash
       run: |
         aws eks update-kubeconfig --region ${{ inputs.aws-region }} --name ${{ inputs.eks-cluster-name }}
         kubectl get namespace
     - name: Set registry output
+      shell: bash
       run: echo "dockerRegistry=${{steps.login-ecr.outputs.registry}}" >> "$GITHUB_OUTPUT"
