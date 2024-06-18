@@ -3,7 +3,6 @@ description: 'Setup kubectl, configure AWS credentials, login to ECR and update 
 inputs:
   kubectl-version:
     description: 'kubectl version to be installed'
-    required: true
     default: 'v1.24.0'
   aws-access-key-id:
     description: 'AWS Access Key ID'
@@ -17,7 +16,6 @@ inputs:
     default: 'ap-southeast-1'
   eks-cluster-name:
     description: 'EKS Cluster Name'
-    required: true
     default: 'awds-dev'
 outputs:
   dockerRegistry:
